@@ -47,3 +47,30 @@ def update_user(db: Session, user_id: int, user):
     db.commit()
     db.refresh(db_user)
     return {"status": "success", "user": db_user}
+
+# 
+def get_tmdb_id(db: Session, user_id: int, tmdb_id: int):
+    return db.query(models.Favorito_movie).filter_by(user_id=user_id, tmdb_id=tmdb_id).all()
+
+
+def favoritar(db:Session, favorito: schemas.Favoritos):
+    existing_favorito = get_tmdb_id(db, favorito.user_id, favorito.tmdb_id)
+    if existing_favorito:
+        raise HTTPException(status_code=400, detail="Movie already favorited by this user")
+    db_favorito= models.Favorito_movie(tmdb_id=favorito.tmdb_id, user_id=favorito.user_id, title=favorito.title)
+    db.add(db_favorito)
+    db.commit()
+    db.refresh(db_favorito)
+    return db_favorito
+
+def get_favorito_by_tmdb_id(db: Session, user_id: int):
+    return db.query(models.Favorito_movie).filter_by(user_id=user_id).all()
+
+def get_tmdb_id(db: Session, user_id: int, tmdb_id: int):
+    return db.query(models.Favorito_movie).filter_by(user_id=user_id, tmdb_id=tmdb_id).all()
+
+def delete_favorito(db: Session, tmdb_id: int):
+    favorito = db.query(models.Favorito_movie).filter(models.Favorito_movie.tmdb_id == tmdb_id).first()
+    db.delete(favorito)
+    db.commit()
+    return favorito

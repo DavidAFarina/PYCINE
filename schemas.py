@@ -22,12 +22,13 @@ class UserModel(BaseModel):
     name: str
     password: str
 
-class FavModel(BaseModel):
-    idmovie: int
-    userid: int
-
-
-class Fav(FavModel):
+class Movie(BaseModel):
     id: int
-    class Config:
-        orm_mode = True
+    tmdb_id: int
+    title: str
+
+class Favoritos(BaseModel):
+    user_id: int
+    tmdb_id: int
+    title: str
+    # title: str
