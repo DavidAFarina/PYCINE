@@ -27,4 +27,4 @@ class Favorito_movie(Base):
     __tablename__ = "favoritos_movies"
     tmdb_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer)
-    title=Column(String)
+    

@@ -57,7 +57,7 @@ def favoritar(db:Session, favorito: schemas.Favoritos):
     existing_favorito = get_tmdb_id(db, favorito.user_id, favorito.tmdb_id)
     if existing_favorito:
         raise HTTPException(status_code=400, detail="Movie already favorited by this user")
-    db_favorito= models.Favorito_movie(tmdb_id=favorito.tmdb_id, user_id=favorito.user_id, title=favorito.title)
+    db_favorito= models.Favorito_movie(tmdb_id=favorito.tmdb_id, user_id=favorito.user_id )
     db.add(db_favorito)
     db.commit()
     db.refresh(db_favorito)

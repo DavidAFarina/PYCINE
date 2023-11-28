@@ -30,5 +30,5 @@ class Movie(BaseModel):
 class Favoritos(BaseModel):
     user_id: int
     tmdb_id: int
-    title: str
-    # title: str
+    title: str | None = None
+   
