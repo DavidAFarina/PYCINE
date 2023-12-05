@@ -119,6 +119,7 @@ async def favoritar_filme(user_id: str, db: Session = Depends(get_db)):
     Apresenta a lista de filmes favoritados
     """
     return crud.get_favorito_by_tmdb_id(db, user_id)
+    
 # =============================
 # Excluir filme favorito
 # =============================
@@ -196,6 +197,9 @@ async def find_filmes_artista(personId: int):
     
 
 # ========================================================
+# =============================
+# Apresenta a lista de filmes 
+# =============================
 
 @app.get("/filmes")
 async def filmes_populares(limit=3, db: Session = Depends(get_db)):
@@ -218,7 +222,35 @@ async def filmes_populares(limit=3, db: Session = Depends(get_db)):
                f"https://image.tmdb.org/t/p/w185{movie['poster_path']}"
         })
     return filtro
+# =============================
+# Apresenta a lista de Artistas
+# =============================
 
+@app.get("/artistas")
+async def artistas(limit=3, db: Session = Depends(get_db)):
+    """ Obtem os artistas usando endpoint discover """
+    data = get_json(
+        "/discover/movie", "?sort_by=vote_count.desc"
+    )
+    results = data['results']
+    print(results)
+    filtro = []
+    # fav_list = [f.tmdb_id for f in crud.get_favorito_by_tmdb_id(db, 1) ]
+    for artista in results:
+        # is_fav =False
+        # if movie['id'] in fav_list:
+        #     is_fav = True
+        filtro.append({
+            "ID": artista['id'], 
+            "title": artista['name'] 
+            # 'is_fav':is_fav,
+            # "image": 
+            #    f"https://image.tmdb.org/t/p/w185{movie['poster_path']}"
+        })
+    return filtro
+# =============================
+# Filtra o artista pelo nome
+# =============================
 @app.get("/artista/{name}")
 async def get_artista(name: str):
     """ 
@@ -230,16 +262,25 @@ async def get_artista(name: str):
     results = data['results']
     filtro = []
     for artist in results:
+        
         filtro.append({
             'id': artist['id'],
             'name': artist['name'],
-            'rank': artist['popularity']
+            'rank': artist['popularity'],
+            # 'biography': artist['biography'],
+            # 'birthday': artist['birthday'],
+            "image":
+                f"https://image.tmdb.org/t/p/w185{artist['profile_path']}"
+            ''
+            # 'biografia': artist['biography']
         })
     # ordenar lista de artistas (filtro) pelo atributo rank
     filtro.sort(reverse=True, key=lambda artist:artist['rank'])
     # return data
     return filtro
-
+# =============================
+# Filtra o artista pelo ID
+# =============================
 @app.get("/artista/id/{id}")
 async def get_artista_id(id: int):
     """ 
@@ -261,6 +302,10 @@ async def get_artista_id(id: int):
     filtro.sort(reverse=True, key=lambda artist:artist['rank'])
     # return data
     return filtro
+
+# =============================
+# Filtra o artista pelo ID
+# =============================
     
 @app.get("/artistas/{id}")
 async def artistas(id: int):

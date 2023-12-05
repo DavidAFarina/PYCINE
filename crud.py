@@ -74,3 +74,11 @@ def delete_favorito(db: Session, tmdb_id: int):
     db.delete(favorito)
     db.commit()
     return favorito
+
+def artistas(db:Session, artistas: schemas.Artistas):
+ 
+    db_artistas= models.Artistas(tmdb_id=artistas.tmdb_id, name=artistas.name, rank = artistas.rank)
+    db.add(db_artistas)
+    db.commit()
+    db.refresh(db_artistas)
+    return db_artistas

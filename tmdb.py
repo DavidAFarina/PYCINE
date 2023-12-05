@@ -1,5 +1,6 @@
 import requests
-api_key = "d1da20fbfa65312b857fb7b517bf855c"
+api_key = "1237ce27fba7eb84970cafb27581a83a"
+
 
 genres = [
     {'id': 28, 'name': 'Action'}, 

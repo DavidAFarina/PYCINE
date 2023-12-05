@@ -31,4 +31,11 @@ class Favoritos(BaseModel):
     user_id: int
     tmdb_id: int
     title: str | None = None
+
+class Artistas(BaseModel):
+    tmdb_id: int
+    name: str
+    rank: str
+    biography:str
+    
    
